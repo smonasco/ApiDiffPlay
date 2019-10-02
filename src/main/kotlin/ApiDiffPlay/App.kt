@@ -3,6 +3,10 @@
  */
 package ApiDiffPlay
 
+import apidiff.APIDiff
+import apidiff.enums.Classifier
+
+
 class App {
     val greeting: String
         get() {
@@ -12,4 +16,18 @@ class App {
 
 fun main(args: Array<String>) {
     println(App().greeting)
+
+    val diff = APIDiff("levelsbeyond/timecode", "https://github.com/levelsbeyond/timecode.git")
+    diff.path = "~/api-diff-scratch"
+
+    val result = diff.detectChangeAllHistory("master", Classifier.API)
+    for (changeMethod in result.changeMethod) {
+        println("\n" + changeMethod.category.displayName + " - " + changeMethod.description)
+    }
+/*
+
+    val result = diff.detectChangeAtCommit("4ad5fdc14ca4b979155d10dcea0182c82380aefa", Classifier.API)
+    for (changeMethod in result.changeMethod) {
+        println("\n" + changeMethod.category.displayName + " - " + changeMethod.isBreakingChange + changeMethod.description)
+    }*/
 }
